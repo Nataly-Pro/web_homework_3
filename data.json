@@ -1,0 +1,34 @@
+[
+{
+  "model": "catalog.category",
+  "pk": 1,
+  "fields": {
+    "name": "Бытовая техника",
+    "description": "Техника для дома"
+  }
+},
+{
+  "model": "catalog.category",
+  "pk": 2,
+  "fields": {
+    "name": "ПК",
+    "description": "Компьютерная техника, ноутбуки, аксессуары"
+  }
+},
+{
+  "model": "catalog.category",
+  "pk": 3,
+  "fields": {
+    "name": "Смартфоны",
+    "description": "Гаджеты, планшеты, электронные книги"
+  }
+},
+{
+  "model": "catalog.category",
+  "pk": 4,
+  "fields": {
+    "name": "ТВ и аудио",
+    "description": "Телевизоры, консоли, аудиотехника и аксессуары к ним"
+  }
+}
+]

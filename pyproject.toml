@@ -10,6 +10,9 @@ packages = [{include = "web_homework_2"}]
 python = "^3.11"
 django = "^4.2.6"
 contact = "^1.0.5"
+pillow = "^10.1.0"
+psycopg2 = "^2.9.9"
+ipython = "^8.17.0"
 
 
 [build-system]
