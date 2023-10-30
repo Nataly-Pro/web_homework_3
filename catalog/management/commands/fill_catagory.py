@@ -8,4 +8,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         Category.objects.all().delete()
-        return os.system("python manage.py loaddata data.json")
+        return os.system("python manage.py loaddata cat_data.json")
+
+
