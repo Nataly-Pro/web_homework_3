@@ -1,0 +1,26 @@
+{% extends 'catalog/base.html' %}
+{% block content %}
+{% load my_tags %}
+    <div class="row text-center">
+        <div class="col-3">
+            <div class="card mb-4 box-shadow">
+                <img class="card-img-top rounded mx-auto d-block"
+                     src="{% mediapath object.preview %}"
+                     alt="image" >
+            </div>
+        </div>
+        <div class="col-9">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">{{ object.name }}</h4>
+            </div>
+            <div class="card-body">
+                <h1 class="card-title pricing-card-title">{{ object.price }}</h1>
+                <p class="card-text">
+                    {{ object.text }}
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
