@@ -8,4 +8,4 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         Product.objects.all().delete()
-        return os.system("python manage.py loaddata pr_data.json")
+        return os.system("python manage.py loaddata product_data.json")
