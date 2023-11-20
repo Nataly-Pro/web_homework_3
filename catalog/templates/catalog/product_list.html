@@ -6,19 +6,27 @@
         <a class="btn btn-outline-primary" href="{% url 'catalog:create_product' %}">Добавить</a>
     </div>
         <div class="row text-center">
+
             {% for object in object_list %}
-                <div class="col-4">
+                <div class="col-3">
                     <div class="card mb-4 box-shadow">
                         <img class="card-img-top"
                              src="{{ object.preview|mediapath }}"
                              alt="image">
                         <div class="card-header">
                             <h3 class="my-0 font-weight-normal" >{{ object.name }}</h3>
+                            {% if object.last_version %}
+                                {{ object.last_version }}
+                            {% endif %}
+
                         </div>
                         <div class="card-body">
                             <h4 class="my-0 font-weight-normal">{{ object.text|truncatechars:100 }}</h4>
 
-                            <a class="btn btn-lg btn-block btn-outline-primary" href="{% url 'catalog:product' pk=object.pk %}">Подробнее</a>
+                            <a class="btn btn-lg btn-block btn-outline-primary"
+                               href="{% url 'catalog:product_view' pk=object.pk %}">Подробнее</a>
+                            <a class="btn btn-lg btn-block btn-outline-primary"
+                               href="{% url 'catalog:update_product' pk=object.pk %}">Редактировать</a>
                         </div>
                     </div>
                 </div>
