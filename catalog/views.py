@@ -1,9 +1,9 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import inlineformset_factory
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, ListView, DetailView, TemplateView, UpdateView, DeleteView
 from pytils.translit import slugify
-
 from catalog.forms import ProductForm, VersionForm
 from catalog.models import Product, Blog, Category, Version
 
@@ -42,15 +42,22 @@ class HomeProductListView(ListView):
     }
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
 
-    def get_success_url(self):
+    def form_valid(self, form):
+        self.object = form.save()
+        self.object.owner = self.request.user
+        self.object.save()
+        print(self.object.pk)
+        return super().form_valid(form)
+
+    def get_success_url(self, *args, **kwargs):
         return reverse('catalog:product_view', args=[self.kwargs.get('pk')])
 
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
 
@@ -140,7 +147,7 @@ class BlogUpdateView(UpdateView):
 
         return super().form_valid(form)
 
-    def get_success_url(self):
+    def get_success_url(self, *args, **kwargs):
         return reverse('catalog:blog_view', args=[self.kwargs.get('pk')])
 
 
