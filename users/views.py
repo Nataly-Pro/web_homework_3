@@ -1,12 +1,10 @@
 from django.conf import settings
-from django.contrib.auth.forms import PasswordResetForm, AuthenticationForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
-from django.shortcuts import redirect, get_object_or_404, render
+from django.shortcuts import redirect, render
 from django.urls import reverse
-from django.views import View
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView
 from users.forms import RegisterForm, ResetForm
 from users.models import User
 from django.utils.crypto import get_random_string
