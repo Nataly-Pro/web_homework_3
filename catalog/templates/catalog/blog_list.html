@@ -2,9 +2,11 @@
 {% block content %}
 {% load static %}
 {% load my_tags %}
-    <div class="col-12 mb-5">
-        <a class="btn btn-outline-primary" href="{% url 'catalog:blog_create' %}">Добавить</a>
-    </div>
+    {% if perms.catalog.add_blog %}
+        <div class="col-12 mb-5">
+            <a class="btn btn-outline-primary" href="{% url 'catalog:blog_create' %}">Добавить</a>
+        </div>
+    {% endif %}
         <div class="row text-center">
             {% for object in object_list %}
                 <div class="col-6">
@@ -22,10 +24,14 @@
                                 <div class="btn-group">
                                     <a href="{% url 'catalog:blog_view' object.pk %}"
                                     class="btn btn-sm btn-outline-secondary">Просмотр</a>
-                                    <a href="{% url 'catalog:blog_edit' object.pk %}" type="button"
-                                    class="btn btn-sm btn-outline-secondary">Редактировать</a>
-                                    <a href="{% url 'catalog:blog_delete' object.pk %}" type="button"
-                                    class="btn btn-sm btn-outline-danger">Удалить</a>
+                                    {% if perms.catalog.change_blog %}
+                                        <a href="{% url 'catalog:blog_edit' object.pk %}" type="button"
+                                        class="btn btn-sm btn-outline-secondary">Редактировать</a>
+                                    {% endif %}
+                                    {% if perms.catalog.delete_blog %}
+                                        <a href="{% url 'catalog:blog_delete' object.pk %}" type="button"
+                                        class="btn btn-sm btn-outline-danger">Удалить</a>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>

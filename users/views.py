@@ -1,12 +1,10 @@
 from django.conf import settings
-from django.contrib.auth.forms import PasswordResetForm, AuthenticationForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
-from django.shortcuts import redirect, get_object_or_404, render
+from django.shortcuts import redirect, render
 from django.urls import reverse
-from django.views import View
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView
 from users.forms import RegisterForm, ResetForm
 from users.models import User
 from django.utils.crypto import get_random_string
@@ -27,6 +25,7 @@ class RegisterView(CreateView):
 
     def form_valid(self, form):
         self.object = form.save()
+        self.object.is_active = False
         self.object.verify_code = get_random_string(12)
         self.object.save()
         url = f'http://127.0.0.1:8000/users/email/verify/{self.object.verify_code}'
