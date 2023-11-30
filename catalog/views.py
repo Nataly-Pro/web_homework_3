@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.forms import inlineformset_factory
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, ListView, DetailView, TemplateView, UpdateView, DeleteView
@@ -56,9 +56,10 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         return reverse('catalog:product_view', kwargs={'pk': self.object.pk})
 
 
-class ProductUpdateView(LoginRequiredMixin, UpdateView):
+class ProductUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
+    permission_required = 'catalog.change_product'
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -68,6 +69,7 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
             context_data['formset'] = VersionFormset(self.request.POST, instance=self.object)
         else:
             context_data['formset'] = VersionFormset(instance=self.object)
+
         return context_data
 
     def form_valid(self, form):
@@ -76,6 +78,7 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
         if formset.is_valid():
             formset.instance = self.object
         formset.save()
+
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -120,10 +123,11 @@ class BlogDetailView(DetailView):
         return self.object
 
 
-class BlogCreateView(CreateView):
+class BlogCreateView(PermissionRequiredMixin, CreateView):
     model = Blog
     fields = ('title', 'content', 'preview',)
     success_url = reverse_lazy('catalog:blog_list')
+    permission_required = 'catalog.add_blog'
 
     def form_valid(self, form):
         if form.is_valid():
@@ -134,9 +138,10 @@ class BlogCreateView(CreateView):
         return super().form_valid(form)
 
 
-class BlogUpdateView(UpdateView):
+class BlogUpdateView(PermissionRequiredMixin, UpdateView):
     model = Blog
     fields = ('title', 'content', 'preview',)
+    permission_required = 'catalog.change_blog'
 
     def form_valid(self, form):
         if form.is_valid():
@@ -150,6 +155,7 @@ class BlogUpdateView(UpdateView):
         return reverse('catalog:blog_view', args=[self.kwargs.get('pk')])
 
 
-class BlogDeleteView(DeleteView):
+class BlogDeleteView(PermissionRequiredMixin, DeleteView):
     model = Blog
     success_url = reverse_lazy('catalog:blog_list')
+    permission_required = 'catalog.delete_blog'

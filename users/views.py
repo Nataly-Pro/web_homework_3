@@ -27,6 +27,7 @@ class RegisterView(CreateView):
 
     def form_valid(self, form):
         self.object = form.save()
+        self.object.is_active = False
         self.object.verify_code = get_random_string(12)
         self.object.save()
         url = f'http://127.0.0.1:8000/users/email/verify/{self.object.verify_code}'
