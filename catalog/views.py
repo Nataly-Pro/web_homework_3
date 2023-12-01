@@ -1,9 +1,9 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 from django.forms import inlineformset_factory
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, ListView, DetailView, TemplateView, UpdateView, DeleteView
 from pytils.translit import slugify
-from catalog.forms import ProductForm, VersionForm
+from catalog.forms import ProductForm, VersionForm, ModeratorProductForm
 from catalog.models import Product, Blog, Category, Version
 
 
@@ -56,10 +56,21 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         return reverse('catalog:product_view', kwargs={'pk': self.object.pk})
 
 
-class ProductUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+class ProductUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Product
     form_class = ProductForm
-    permission_required = 'catalog.change_product'
+
+    def test_func(self):
+        if self.request.user.is_staff:
+            return True
+        return self.request.user == Product.objects.get(pk=self.kwargs['pk']).owner
+
+    def get_form_class(self):
+        if self.request.user == self.object.owner \
+                or self.request.user.is_superuser:
+            return ProductForm
+        elif self.request.user.has_perm('catalog.change_product'):
+            return ModeratorProductForm
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
