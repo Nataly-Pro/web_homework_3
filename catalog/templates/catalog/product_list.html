@@ -26,10 +26,30 @@
 
                                 <a class="btn btn-lg btn-block btn-outline-primary"
                                    href="{% url 'catalog:product_view' pk=object.pk %}">Подробнее</a>
-                                {% if object.owner == user %}
+                                {% if user == object.owner or perms.catalog.change_product %}
                                     <a class="btn btn-lg btn-block btn-outline-primary"
                                        href="{% url 'catalog:update_product' pk=object.pk %}">Редактировать</a>
                                 {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% elif not object.is_published and perms.catalog.set_published %}
+                    <div class="col-3">
+                        <div class="card mb-4 box-shadow">
+                            <img class="card-img-top"
+                                 src="{{ object.preview|mediapath }}"
+                                 alt="image">
+                            <div class="card-header">
+                                <h3 class="my-0 font-weight-normal" >{{ object.name }}</h3>
+
+                            </div>
+                            <div class="card-body">
+                                <h4 class="my-0 font-weight-normal">{{ object.text|truncatechars:100 }}</h4>
+
+                                <a class="btn btn-lg btn-block btn-outline-primary"
+                                   href="{% url 'catalog:product_view' pk=object.pk %}">Подробнее</a>
+                                <a class="btn btn-lg btn-block btn-outline-primary"
+                                   href="{% url 'catalog:update_product' pk=object.pk %}">Редактировать</a>
                             </div>
                         </div>
                     </div>
