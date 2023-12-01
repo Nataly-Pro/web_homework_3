@@ -13,7 +13,7 @@ class ProductForm(StyleFormMixin, forms.ModelForm):
 
     class Meta:
         model = Product
-        exclude = ('create_date', 'last_mod_date',)
+        exclude = ('create_date', 'last_mod_date', 'is_published',)
 
     def clean_name(self):
         cleaned_data = self.cleaned_data['name']
@@ -30,6 +30,13 @@ class ProductForm(StyleFormMixin, forms.ModelForm):
             if word in cleaned_data.lower().strip():
                 raise forms.ValidationError('Нельзя указывать запрещённые продукты')
         return cleaned_data
+
+
+class ModeratorProductForm(StyleFormMixin, forms.ModelForm):
+
+    class Meta:
+        model = Product
+        fields = ('text', 'category', 'is_published',)
 
 
 class VersionForm(StyleFormMixin, forms.ModelForm):
