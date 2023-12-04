@@ -5,6 +5,7 @@ from django.views.generic import CreateView, ListView, DetailView, TemplateView,
 from pytils.translit import slugify
 from catalog.forms import ProductForm, VersionForm, ModeratorProductForm
 from catalog.models import Product, Blog, Category, Version
+from catalog.services import get_cache_for_category_list
 
 
 class CategoryListView(ListView):
@@ -12,6 +13,11 @@ class CategoryListView(ListView):
     extra_context = {
         'title': 'Каталог товаров из Южной Кореи'
     }
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data['categories'] = get_cache_for_category_list()
+        return context_data
 
 
 class SkinProductListView(ListView):
